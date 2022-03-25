@@ -1,0 +1,22 @@
+/*
+ * Color palette https://coolors.co/74a57f-e9806e-f5cb5c-242423-bfdbf7
+ */
+body{
+    display: flex;
+    flex-direction: column;
+    font-family:Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+}
+
+footer{
+    align-content: flex-end;
+    display: flex;
+    justify-content: center;
+    min-width: fit-content;
+}
+
+#main-heading{
+    display: flex;
+    justify-content: center;
+    min-width: fit-content;
+}
