@@ -36,9 +36,9 @@ button{
 }
 
 #display-text{
-    direction: rtl;
     display: flex;
     min-width: fit-content;
+    text-align: right;
     width: 100%;
 }
 
