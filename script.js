@@ -1,8 +1,12 @@
 // Variables
-let firstRun = true;
 let currentNum = '';
+let firstNum = true;
+let lastNum = '';
+let lastPressed = '';
+let lastOperator = ';'
+let odd = true;
 let operator = '';
-let secondNum = false;
+let listOfOperators = ['+', '-', '/', '*'];
 
 // This function adds two numbers
 function add(num1, num2){
@@ -35,8 +39,13 @@ function addListenerToButtons(){
             // Equal button
             else if(button.value == '='){
                 button.addEventListener('click', () => {
+                    if(currentNum == ''){
+                        return;
+                    }
                     let answer = operate(operator, parseInt(currentNum), parseInt(display.value));
                     display.value = answer;
+                    currentNum = '';
+                    firstNum = true;
                 });
             }
 
@@ -45,21 +54,46 @@ function addListenerToButtons(){
             // 23 - 3 = 20 pressing equal again will be wrong answer
             else{
                 button.addEventListener('click', () => {
-                    // If the second number has been entered
-                    if(secondNum){
-                        let answer = operate(operator, parseInt(currentNum), parseInt(display.value));
-                        display.value = answer;
-                        currentNum = answer;
-                        secondNum = false;
-                        firstRun = true;
+                    operator = button.value;
+                    // If the last pressed was an operator
+                    if(listOfOperators.includes(lastPressed)){
+                        operator = button.value;
+                        firstNum = true;
+                    }
+
+                    // If the first number has been entered
+                    if(firstNum == false && currentNum != ''){
+                        if(odd == false){
+                            lastNum = display.value;
+                            let answer = operate(lastOperator, parseInt(currentNum), parseInt(display.value)).toString();
+                            currentNum = display.value;
+                            display.value = answer;
+                            currentNum = answer;
+                            firstNum = true;
+                            lastPressed = button.value;
+                            odd = true;
+                            lastOperator = operator;
+                        }
+                        else{
+                            lastNum = display.value;
+                            let answer = operate(lastOperator, parseInt(currentNum), parseInt(lastNum)).toString();
+                            display.value = answer;
+                            lastNum = display.value;
+                            currentNum = answer;
+                            firstNum = true;
+                            lastPressed = button.value;
+                            odd = false;
+                            lastOperator = operator;
+                        }
+                        
                     }
 
                     // If the first number has not been entered
                     else{
                         currentNum = display.value;
-                        secondNum = true;
-                        firstRun = true;
-                        operator = button.value;
+                        firstNum = true;
+                        lastOperator = button.value;
+                        lastPressed = button.value;
                     }                    
                 });
             }
@@ -70,15 +104,18 @@ function addListenerToButtons(){
         // If the button is a number
         else{
             button.addEventListener('click', () => {
-                // Detect if this is the first button being entered and change firstRun to false
-                if(firstRun){
+                // Detect if this is the first number being entered and change firstNum to false
+                if(firstNum == true){
                     display.value = button.textContent;
-                    firstRun = false;
+                    firstNum = false;
+                    lastPressed = button.value;
                 }
 
                 // If this is not the first button being entered append the number to the display
                 else{
                     display.value = display.value + button.textContent;
+                    lastPressed = button.value;
+                    firstNum = false;
                 }
             });
         }       
@@ -93,11 +130,13 @@ function backspace(){
 // This function clears the display
 function clearDisplay(){
     let display = document.querySelector('#display-text');
+    currentNum = ''; // Reset the currentNum variable
     display.value = '0';
-    firstRun = true; // Reset the firstRun variable
-    currentNum = 0; // Reset the currentNum variable
+    firstNum = true; // Reset the firstNum variable
+    lastNum = ''; // Reset the lastNum variable
+    lastPressed = ''; // Reset the lastPressed variable
     operator = ''; // Reset the operator variable
-    secondNum = false; // Reset the secondNum variable
+   
 }
 // TODO
 // This function handles the decimal
