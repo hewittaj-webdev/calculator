@@ -33,7 +33,7 @@ function addListenerToButtons(){
             
             // Backspace button
             else if(button.value == String.fromCharCode(8592)){
-                button.addEventListener('click', (clearDisplay())); // TODO change from clear display to delete one character
+                button.addEventListener('click', (backspace())); 
             }
 
             // Equal button
@@ -50,8 +50,6 @@ function addListenerToButtons(){
             }
 
             // Operator buttons
-            // TODO fix logic errors in pressing an operator without pressing equal
-            // 23 - 3 = 20 pressing equal again will be wrong answer
             else{
                 button.addEventListener('click', () => {
                     operator = button.value;
@@ -121,10 +119,13 @@ function addListenerToButtons(){
         }       
     };
 }
-// TODO
+
 // This function deletes one number from the screen
 function backspace(){
-
+    let display = document.querySelector('#display-text');
+    let val = display.value;
+    let newVal = val.slice(0, -1);
+    display.value = newVal;
 }
 
 // This function clears the display
@@ -138,12 +139,6 @@ function clearDisplay(){
     operator = ''; // Reset the operator variable
    
 }
-// TODO
-// This function handles the decimal
-function decimal(){
-
-}
-
 
 // This function divides two numbers
 function divide(num1, num2){
@@ -169,6 +164,10 @@ function operate(op, num1, num2){
             break;
         
         case "/":
+            if(num2 == 0){
+                answer = 0;
+                return "Nice try...";
+            }
             answer = divide(num1, num2);
             break;
         
@@ -187,6 +186,10 @@ function subtract(num1, num2){
 // This function calls the main functions to setup the calculator
 function mainCall(){
     addListenerToButtons();
+
+    // Set display value to 0
+    let display = document.querySelector('#display-text');
+    display.value = "0";
 }
 
 mainCall();
